@@ -31,11 +31,14 @@ element getElement();//queue에 삽입할 data를 받는 함수
 
 int main(void)
 {
+
+
 	QueueType *cQ = createQueue();//createQueue 함수의 리턴 값을 QueueType 타입의 변수 *cQ에 저장
 	element data;//자료형 element(char) 타입의 변수
 	char command;
 
 	do{
+		printf("\n[----- [김민경] [2023041054] -----]\n");
 		printf("\n-----------------------------------------------------\n");
 		printf("                     Circular Q                   \n");
 		printf("------------------------------------------------------\n");
