@@ -51,6 +51,7 @@ int main()
 	char command;
 
 	do{
+		printf("\n[----- [김민경] [2023041054] -----]\n");
 		printf("----------------------------------------------------------------\n");
 		printf("               Infix to Postfix, then Evaluation               \n");
 		printf("----------------------------------------------------------------\n");
@@ -170,11 +171,49 @@ void toPostfix()
 	while(*exp != '\0')
 	{
 		/* 필요한 로직 완성 */
-
+		switch(*exp) {
+            case '(':
+                postfixPush(*exp);
+                exp++;
+                break;
+            case ')':
+                while (postfixStackTop != -1 && getPriority(postfixStack[postfixStackTop]) != lparen) {
+                    char temp = postfixPop();
+                    charCat(&temp);
+                }
+                if (postfixStackTop == -1) {
+                    printf("error\n");
+                    return;
+                }
+                postfixPop();
+                exp++;
+                break;
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+                while (postfixStackTop != -1 && getPriority(postfixStack[postfixStackTop]) >= getPriority(*exp)) {
+                    char temp = postfixPop();
+                    charCat(&temp);
+                }
+                postfixPush(*exp);
+                exp++;
+                break;
+            default:
+                while (*exp >= '0' && *exp <= '9') {
+                    charCat(&*exp);
+                    exp++;
+                }
+                break;
+        }
 	}
 
 	/* 필요한 로직 완성 */
-
+	// postfix 스택에 남아있는 연산자들을 postfixExp에 추가
+    while (postfixStackTop != -1) {
+        char temp = postfixPop();
+        charCat(&temp);
+    }
 }
 void debug()
 {
@@ -207,5 +246,43 @@ void reset()
 void evaluation()
 {
 	/* postfixExp, evalStack을 이용한 계산 */
-}
+	// postfixExp 문자열을 하나씩 읽어들입니다.
+    char *exp = postfixExp;
+    int x, y,num=0;
 
+    // postfixExp를 순회하면서 계산을 수행합니다.
+    while (*exp != '\0') {
+        switch (*exp) {
+            case '+':
+                y = evalPop();
+                x = evalPop();
+                evalPush(x + y);
+                break;
+            case '-':
+                y = evalPop();
+                x = evalPop();
+                evalPush(x - y);
+                break;
+            case '*':
+                y = evalPop();
+                x = evalPop();
+                evalPush(x * y);
+                break;
+            case '/':
+                y = evalPop();
+                x = evalPop();
+                evalPush(x / y);
+                break;
+            default:
+                // 숫자인 경우
+                num=*exp;
+                num = num - '0';
+                evalPush(num);
+                break;
+        }
+        exp++;
+    }
+
+    // evalStack에 남아있는 마지막 값이 계산 결과입니다.
+    evalResult = evalPop();
+}
