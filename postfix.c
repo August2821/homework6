@@ -12,26 +12,26 @@
 #define MAX_STACK_SIZE 10
 #define MAX_EXPRESSION_SIZE 20
 
-/* stack ë‚´ì—ì„œ ìš°ì„ ìˆœìœ„, lparen = 0 ê°€ìž¥ ë‚®ìŒ */
+/* stack ³»¿¡¼­ ¿ì¼±¼øÀ§, lparen = 0 °¡Àå ³·À½ */
 typedef enum{
-	lparen = 0,  /* ( ì™¼ìª½ ê´„í˜¸ */
-	rparen = 9,  /* ) ì˜¤ë¥¸ìª½ ê´„í˜¸*/
-	times = 7,   /* * ê³±ì…ˆ */
-	divide = 6,  /* / ë‚˜ëˆ—ì…ˆ */
-	plus = 5,    /* + ë§ì…ˆ */
-	minus = 4,   /* - ëº„ì…ˆ */
-	operand = 1 /* í”¼ì—°ì‚°ìž */
+	lparen = 0,  /* ( ¿ÞÂÊ °ýÈ£ */
+	rparen = 9,  /* ) ¿À¸¥ÂÊ °ýÈ£*/
+	times = 7,   /* * °ö¼À */
+	divide = 6,  /* / ³ª´°¼À */
+	plus = 5,    /* + µ¡¼À */
+	minus = 4,   /* - »¬¼À */
+	operand = 1 /* ÇÇ¿¬»êÀÚ */
 } precedence;
 
-char infixExp[MAX_EXPRESSION_SIZE];   	/* infix expressionì„ ì €ìž¥í•˜ëŠ” ë°°ì—´ */
-char postfixExp[MAX_EXPRESSION_SIZE];	/* postfixë¡œ ë³€ê²½ëœ ë¬¸ìžì—´ì„ ì €ìž¥í•˜ëŠ” ë°°ì—´ */
-char postfixStack[MAX_STACK_SIZE];	/* postfixë¡œ ë³€í™˜ì„ ìœ„í•´ í•„ìš”í•œ ìŠ¤íƒ */
-int evalStack[MAX_STACK_SIZE];		/* ê³„ì‚°ì„ ìœ„í•´ í•„ìš”í•œ ìŠ¤íƒ */
+char infixExp[MAX_EXPRESSION_SIZE];   	/* infix expressionÀ» ÀúÀåÇÏ´Â ¹è¿­ */
+char postfixExp[MAX_EXPRESSION_SIZE];	/* postfix·Î º¯°æµÈ ¹®ÀÚ¿­À» ÀúÀåÇÏ´Â ¹è¿­ */
+char postfixStack[MAX_STACK_SIZE];	/* postfix·Î º¯È¯À» À§ÇØ ÇÊ¿äÇÑ ½ºÅÃ */
+int evalStack[MAX_STACK_SIZE];		/* °è»êÀ» À§ÇØ ÇÊ¿äÇÑ ½ºÅÃ */
 
-int postfixStackTop = -1;  /* postfixStackìš© top */
-int evalStackTop = -1;	   /* evalStackìš© top */
+int postfixStackTop = -1;  /* postfixStack¿ë top */
+int evalStackTop = -1;	   /* evalStack¿ë top */
 
-int evalResult = 0;	   /* ê³„ì‚° ê²°ê³¼ë¥¼ ì €ìž¥ */
+int evalResult = 0;	   /* °è»ê °á°ú¸¦ ÀúÀå */
 
 void postfixpush(char x);
 char postfixPop();
@@ -118,8 +118,8 @@ int evalPop()
 }
 
 /**
- * infix expressionì„ ìž…ë ¥ë°›ëŠ”ë‹¤.
- * infixExpì—ëŠ” ìž…ë ¥ëœ ê°’ì„ ì €ìž¥í•œë‹¤.
+ * infix expressionÀ» ÀÔ·Â¹Þ´Â´Ù.
+ * infixExp¿¡´Â ÀÔ·ÂµÈ °ªÀ» ÀúÀåÇÑ´Ù.
  */
 void getInfix()
 {
@@ -146,7 +146,7 @@ precedence getPriority(char x)
 }
 
 /**
- * ë¬¸ìží•˜ë‚˜ë¥¼ ì „ë‹¬ë°›ì•„, postfixExpì— ì¶”ê°€
+ * ¹®ÀÚÇÏ³ª¸¦ Àü´Þ¹Þ¾Æ, postfixExp¿¡ Ãß°¡
  */
 void charCat(char* c)
 {
@@ -157,23 +157,23 @@ void charCat(char* c)
 }
 
 /**
- * infixExpì˜ ë¬¸ìžë¥¼ í•˜ë‚˜ì”© ì½ì–´ê°€ë©´ì„œ stackì„ ì´ìš©í•˜ì—¬ postfixë¡œ ë³€ê²½í•œë‹¤.
- * ë³€ê²½ëœ postfixëŠ” postFixExpì— ì €ìž¥ëœë‹¤.
+ * infixExpÀÇ ¹®ÀÚ¸¦ ÇÏ³ª¾¿ ÀÐ¾î°¡¸é¼­ stackÀ» ÀÌ¿ëÇÏ¿© postfix·Î º¯°æÇÑ´Ù.
+ * º¯°æµÈ postfix´Â postFixExp¿¡ ÀúÀåµÈ´Ù.
  */
 void toPostfix()
 {
-	/* infixExpì˜ ë¬¸ìž í•˜ë‚˜ì”©ì„ ì½ê¸°ìœ„í•œ í¬ì¸í„° */
+	/* infixExpÀÇ ¹®ÀÚ ÇÏ³ª¾¿À» ÀÐ±âÀ§ÇÑ Æ÷ÀÎÅÍ */
 	char *exp = infixExp;
-	char x; /* ë¬¸ìží•˜ë‚˜ë¥¼ ìž„ì‹œë¡œ ì €ìž¥í•˜ê¸° ìœ„í•œ ë³€ìˆ˜ */
+	char x; /* ¹®ÀÚÇÏ³ª¸¦ ÀÓ½Ã·Î ÀúÀåÇÏ±â À§ÇÑ º¯¼ö */
 
-	/* expë¥¼ ì¦ê°€ì‹œì¼œê°€ë©´ì„œ, ë¬¸ìžë¥¼ ì½ê³  postfixë¡œ ë³€ê²½ */
+	/* exp¸¦ Áõ°¡½ÃÄÑ°¡¸é¼­, ¹®ÀÚ¸¦ ÀÐ°í postfix·Î º¯°æ */
 	while(*exp != '\0')
 	{
-		/* í•„ìš”í•œ ë¡œì§ ì™„ì„± */
+		/* ÇÊ¿äÇÑ ·ÎÁ÷ ¿Ï¼º */
 
 	}
 
-	/* í•„ìš”í•œ ë¡œì§ ì™„ì„± */
+	/* ÇÊ¿äÇÑ ·ÎÁ÷ ¿Ï¼º */
 
 }
 void debug()
@@ -206,6 +206,6 @@ void reset()
 
 void evaluation()
 {
-	/* postfixExp, evalStackì„ ì´ìš©í•œ ê³„ì‚° */
+	/* postfixExp, evalStackÀ» ÀÌ¿ëÇÑ °è»ê */
 }
 
